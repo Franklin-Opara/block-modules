@@ -73,7 +73,32 @@ const AppState = {
     // ]
     
     // 🚨 YOUR CODE STARTS HERE:
-    
+    isWalletConnected : false,
+    currentAccount: null,
+    currentNetwork: null,
+
+    selectedOption: null,
+    hasUserVoted: false,
+    currentPoll: null,
+
+    isLoading: false,
+    transactionInProgress: false,
+
+    pollTitle: "What is your favorite programming language?",
+    pollOptions: [
+        {id: 0, name: "Javascript", votes: 0},
+        {id: 0, name: "Python", votes: 0},
+        {id: 0, name: "Java", votes: 0},
+        {id: 0, name: "C++", votes: 0},
+        {id: 0, name: "Ruby", votes: 0},
+        {id: 0, name: "C", votes: 0},
+        {id: 0, name: "Rust", votes: 0},
+        {id: 0, name: "C#", votes: 0},
+        {id: 0, name: "Go", votes: 0},
+        {id: 0, name: "SQL", votes: 0},
+
+    ]
+
     
     // 🚨 YOUR CODE ENDS HERE
 };
@@ -105,6 +130,23 @@ const CONFIG = {
     // - EXPLORER_URLS: object with network IDs as keys
     
     // 🚨 YOUR CODE STARTS HERE:
+    CHAIN_ID: '11155111',
+    CHAIN_NAME: 'Sepolia Testnet',
+    RPC_URL: 'https://sepolia.infura.io/v3/',
+
+    CONTRACT_ADDRESS: null,
+
+    TRANSACTION_TIMEOUT: 30000,
+    POLL_REFRESH_INTERVAL: 10000,
+
+    EXPLORER_URLS: {
+        '11155111': 'https://sepolia.etherscan.io/tx/',
+        '1': 'https://etherscan.io/tx/',
+        '56': 'https://bscscan.com/tx/',
+        '137': 'https://polygonscan.com/tx/',
+        '42161': 'https://arbiscan.io/tx/',
+        
+    }
     
     
     // 🚨 YOUR CODE ENDS HERE
@@ -135,7 +177,8 @@ function showErrorMessage(message) {
     // HINT: console.error('❌ Error:', message);
     
     // 🚨 YOUR CODE STARTS HERE:
-    
+    alert(`❌ Error: ${message}`);
+    console.error(`❌ Error: ${message}`);
     
     // 🚨 YOUR CODE ENDS HERE
 }
@@ -148,7 +191,8 @@ function showSuccessMessage(message) {
     // 3. Log to console for debugging
     
     // 🚨 YOUR CODE STARTS HERE:
-    
+    alert(`✅ Success: ${message}`);
+    console.log(`✅ Success: ${message}`);
     
     // 🚨 YOUR CODE ENDS HERE
 }
@@ -164,7 +208,11 @@ function formatWalletAddress(address) {
     // HINT: address.length gives you the total length
     
     // 🚨 YOUR CODE STARTS HERE:
-    
+    if(address){
+        return `${address.substring(0, 6)}...${address.substring(address.length - 5)}`;
+    } else{
+        return 'Not Connected';
+    }
     
     // 🚨 YOUR CODE ENDS HERE
 }
@@ -195,7 +243,11 @@ function calculateTotalVotes() {
     //       }, 0);
     
     // 🚨 YOUR CODE STARTS HERE:
-    
+    return AppState.pollOptions.reduce(
+        function(total, option){
+            return total + option.votes;
+        }
+    )
     
     // 🚨 YOUR CODE ENDS HERE
 }
@@ -210,7 +262,10 @@ function checkUserVotingStatus() {
     // HINT: Add a console.log to show the status
     
     // 🚨 YOUR CODE STARTS HERE:
-    
+    if(AppState.currentAccount) {
+        AppState.hasUserVoted = false; // Placeholder, will be updated later
+        console.log(`User voting status checked: ${AppState.hasUserVoted}`);
+    }
     
     // 🚨 YOUR CODE ENDS HERE
 }
@@ -240,7 +295,11 @@ function updateTotalVotesDisplay() {
     // HINT: element.textContent = `Total Votes: ${total}`;
     
     // 🚨 YOUR CODE STARTS HERE:
-    
+    const result = document.getElementById('total-votes');
+    const total = calculateTotalVotes();
+    if (result){
+        result.textContent = `Total Votes: ${total}`;
+    }
     
     // 🚨 YOUR CODE ENDS HERE
 }
@@ -251,7 +310,7 @@ function updateTotalVotesDisplay() {
 
 /*
 🎯 SELF-CHECK: MODULE 1 VALIDATION
-
+             
 This function tests if you completed Module 1 correctly.
 Run this in the browser console to check your work!
 */
