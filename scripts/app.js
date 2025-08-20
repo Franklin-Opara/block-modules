@@ -1,6 +1,6 @@
 /*
 =============================================================================
-BLOCKVOTE - STUDENT TEMPLATE FILE  ACTIVATE
+BLOCKVOTE - STUDENT TEMPLATE FILE
 =============================================================================
 
 🎓 STUDENT INSTRUCTIONS:
