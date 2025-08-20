@@ -456,7 +456,26 @@ function createVotingOptionElement(option, index) {
     placeholder.style.border = '2px dashed #ccc';
     placeholder.style.margin = '10px';
     placeholder.style.textAlign = 'center';
-    return placeholder;
+       
+    
+    const optionElement = document.createElement('div');
+    optionElement.className = 'vote-option';
+    optionElement.setAttribute('data-option-id', option.id);
+    optionElement.innerHTML = 
+        `
+        <div class="vote-option-header">
+            <span class="option-name">${option.name}</span>
+            <span class="vote-count">${option.votes} votes</span>
+        </div>
+
+        <div class="vote-progress">
+            <div class="vote-progress-fill" style="width: 0%"></div>
+        </div>
+        <div class="vote-percentage">0.0%</div>
+        `
+    optionElement.addEventListener('click', function() {
+        selectVotingOption(option.id);
+    });
 }
 
 // TODO 2.2: Complete the createVotingOptions function (Module 2)
@@ -476,12 +495,25 @@ function selectVotingOption(optionId) {
     // STUDENT TASK (Module 2): Handle voting option selection
     console.log('📝 TODO: Complete this function in Module 2');
     console.log('🎯 Option selected:', optionId);
+
+    if (AppState.isWalletConnected && AppState.hasUserVoted==false){
+        AppState.selectedOption = optionId;
+        AppState.hasUserVoted = true;
+        showSuccessMessage(`You selected option ${optionId}`);
+        updateVotingOptionsDisplay();
+
+    
+
+    }
+
 }
 
 // TODO 2.4: Complete the updateVotingOptionsDisplay function (Module 2)
 function updateVotingOptionsDisplay() {
     // STUDENT TASK (Module 2): Update visual state of voting options
     console.log('📝 TODO: Complete this function in Module 2');
+    const optioncontainer = document.querySelectorAll('.vote-options');
+    
 }
 
 // =============================================================================

@@ -264,6 +264,7 @@ function createVotingOptionElement(option, index) {
             <span class="option-name">${option.name}</span>
             <span class="vote-count">${option.votes} votes</span>
         </div>
+        
         <div class="vote-progress">
             <div class="vote-progress-fill" style="width: 0%"></div>
         </div>
