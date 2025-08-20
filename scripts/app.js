@@ -209,7 +209,7 @@ function formatWalletAddress(address) {
     
     // 🚨 YOUR CODE STARTS HERE:
     if(address){
-        return `${address.substring(0, 6)}...${address.substring(address.length - 5)}`;
+        return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
     } else{
         return 'Not Connected';
     }
@@ -246,8 +246,8 @@ function calculateTotalVotes() {
     return AppState.pollOptions.reduce(
         function(total, option){
             return total + option.votes;
-        }
-    )
+        },0
+    );
     
     // 🚨 YOUR CODE ENDS HERE
 }
