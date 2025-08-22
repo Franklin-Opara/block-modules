@@ -449,14 +449,39 @@ function createVotingOptionElement(option, index) {
     console.log('📝 TODO: Complete this function in Module 2');
     console.log('📖 See STUDENT-GUIDE.md Module 2 for instructions');
     
-    // Placeholder return to prevent errors
+    /* // Placeholder return to prevent errors
     const placeholder = document.createElement('div');
     placeholder.textContent = 'TODO: Complete in Module 2';
     placeholder.style.padding = '20px';
     placeholder.style.border = '2px dashed #ccc';
     placeholder.style.margin = '10px';
     placeholder.style.textAlign = 'center';
-    return placeholder;
+    return placeholder; */
+    const optionElement = document.createElement('div');
+
+    
+    optionElement.classList.add('vote-option');
+
+    
+    optionElement.setAttribute('data-option-id', option.id);
+
+    
+    optionElement.innerHTML = `
+        <div class="vote-option-header">
+            <span class="option-name">${option.name}</span>
+            <span class="vote-count">${option.votes} votes</span>
+        </div>
+        <div class="vote-progress">
+            <div class="vote-progress-fill" style="width: 0%"></div>
+        </div>
+        <div class="vote-percentage">0.0%</div>
+    `;
+    optionElement.addEventListener('click', function () {
+        console.log(`Option clicked: ${option.name}`);
+     
+    });
+
+    return optionElement;
 }
 
 // TODO 2.2: Complete the createVotingOptions function (Module 2)
@@ -464,11 +489,20 @@ function createVotingOptions() {
     // STUDENT TASK (Module 2): Generate all voting option elements
     console.log('📝 TODO: Complete this function in Module 2');
     
-    // Placeholder implementation
+    /* // Placeholder implementation
     const container = document.getElementById('voting-options');
     if (container) {
         container.innerHTML = '<p style="text-align: center; padding: 20px;">📚 Complete Module 2 to see voting options here!</p>';
-    }
+    } */
+
+        const container = document.getElementById('voting-options');
+    if (!container) return;
+
+    container.innerHTML = '';
+    AppState.pollOptions.forEach((option, index) => {
+        const optionElement = createVotingOptionElement(option, index);
+        container.appendChild(optionElement);
+    });
 }
 
 // TODO 2.3: Complete the selectVotingOption function (Module 2)
@@ -476,12 +510,61 @@ function selectVotingOption(optionId) {
     // STUDENT TASK (Module 2): Handle voting option selection
     console.log('📝 TODO: Complete this function in Module 2');
     console.log('🎯 Option selected:', optionId);
+    
+    if (!AppState.isWalletConnected) {
+        showErrorMessage('Please connect your wallet first to vote.');
+        return;
+    }
+
+    if (AppState.hasUserVoted) {
+        showErrorMessage('You have already voted. Each wallet can only vote once.');
+        return;
+    }
+
+    AppState.selectedOption = optionId;
+
+    createVotingOptions();
+    showVoteSubmission();
 }
 
 // TODO 2.4: Complete the updateVotingOptionsDisplay function (Module 2)
 function updateVotingOptionsDisplay() {
     // STUDENT TASK (Module 2): Update visual state of voting options
     console.log('📝 TODO: Complete this function in Module 2');
+
+
+    const optionElements = document.querySelectorAll('.vote-option');
+    const totalVotes = AppState.pollOptions.reduce((sum, opt) => sum + opt.votes, 0);
+    optionElements.forEach((element) => {
+        const optionId = parseInt(element.getAttribute('data-option-id'), 10);
+        const option = AppState.pollOptions.find(opt => opt.id === optionId);
+        if (!option) return;
+        element.classList.remove('selected');
+        if (AppState.selectedOption === optionId) {
+            element.classList.add('selected');
+        }
+
+        const countSpan = element.querySelector('.vote-count');
+        if (countSpan) {
+            countSpan.textContent = `${option.votes} votes`;
+        }
+
+        // --- Update percentage + progress bar ---
+        let percentage = 0;
+        if (totalVotes > 0) {
+            percentage = (option.votes / totalVotes) * 100;
+        }
+
+        const percentageSpan = element.querySelector('.vote-percentage');
+        if (percentageSpan) {
+            percentageSpan.textContent = `${percentage.toFixed(1)}%`;
+        }
+
+        const progressFill = element.querySelector('.vote-progress-fill');
+        if (progressFill) {
+            progressFill.style.width = `${percentage}%`;
+        }
+    });
 }
 
 // =============================================================================
