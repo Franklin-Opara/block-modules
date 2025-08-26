@@ -87,15 +87,15 @@ const AppState = {
     pollTitle: "What is your favorite programming language?",
     pollOptions: [
         {id: 0, name: "Javascript", votes: 0},
-        {id: 0, name: "Python", votes: 0},
-        {id: 0, name: "Java", votes: 0},
-        {id: 0, name: "C++", votes: 0},
-        {id: 0, name: "Ruby", votes: 0},
-        {id: 0, name: "C", votes: 0},
-        {id: 0, name: "Rust", votes: 0},
-        {id: 0, name: "C#", votes: 0},
-        {id: 0, name: "Go", votes: 0},
-        {id: 0, name: "SQL", votes: 0},
+        {id: 1, name: "Python", votes: 0},
+        {id: 2, name: "Java", votes: 0},
+        {id: 3, name: "C++", votes: 0},
+        {id: 4, name: "Ruby", votes: 0},
+        {id: 5, name: "C", votes: 0},
+        {id: 6, name: "Rust", votes: 0},
+        {id: 7, name: "C#", votes: 0},
+        {id: 8, name: "Go", votes: 0},
+        {id: 9, name: "SQL", votes: 0},
 
     ]
 
@@ -476,9 +476,9 @@ function createVotingOptionElement(option, index) {
         </div>
         <div class="vote-percentage">0.0%</div>
     `;
+    
     optionElement.addEventListener('click', function () {
-        console.log(`Option clicked: ${option.name}`);
-     
+        selectVotingOption(option.id);
     });
 
     return optionElement;
